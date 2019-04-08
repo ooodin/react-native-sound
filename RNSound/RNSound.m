@@ -50,15 +50,21 @@
 }
 
 -(AVAudioPlayer*) playerForKey:(nonnull NSNumber*)key {
-  return [[self playerPool] objectForKey:key];
+  @synchronized (self.playerPool) {
+    return [[self playerPool] objectForKey:key];
+  }
 }
 
 -(NSNumber*) keyForPlayer:(nonnull AVAudioPlayer*)player {
-  return [[[self playerPool] allKeysForObject:player] firstObject];
+  @synchronized (self.playerPool) {
+    return [[[self playerPool] allKeysForObject:player] firstObject];
+  }
 }
 
 -(RCTResponseSenderBlock) callbackForKey:(nonnull NSNumber*)key {
-  return [[self callbackPool] objectForKey:key];
+  @synchronized (self.callbackPool) {
+    return [[self callbackPool] objectForKey:key];
+  }
 }
 
 -(NSString *) getDirectory:(int)directory {
